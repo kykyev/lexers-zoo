@@ -15,8 +15,7 @@ def test_do_word():
     for symb, test in d.items():
         lex = Lexer()
         lex.buffer.push(Asymbol('a', 1, 5))
-        if symb:
-            lex.input_stream.put(Asymbol(symb, 1, 6))
+        lex.input_stream.put(Asymbol(symb, 1, 6) if symb else EOFError)
         yield test, lex
 
 
@@ -64,8 +63,7 @@ def test_do_number():
     for symb, test in d.items():
         lex = Lexer()
         lex.buffer.push(Asymbol('2', 1, 5))
-        if symb:
-            lex.input_stream.put(Asymbol(symb, 1, 6))
+        lex.input_stream.put(Asymbol(symb, 1, 6) if symb else EOFError)
         yield test, lex
 
 def _test_do_number_letter(lex):
@@ -111,8 +109,7 @@ def test_do_wait():
     }
     for symb, test in d.items():
         lex = Lexer()
-        if symb:
-            lex.input_stream.put(Asymbol(symb, 1, 6))
+        lex.input_stream.put(Asymbol(symb, 1, 6) if symb else EOFError)
         yield test, lex
 
 def _test_do_wait_letter(lex):

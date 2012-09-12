@@ -1,6 +1,7 @@
 """
 """
-from collections import namedtuple, deque
+from collections import namedtuple
+from queue import Queue
 
 __all__ = [
     'TOK_WORD', 'TOK_NUMBER', 'TOK_EOF',
@@ -33,20 +34,22 @@ Asymbol = namedtuple('Asymbol', 'symbol lineno column')
 
 class MailBox:
     def __init__(self):
-        self.box = deque()
+        self.box = Queue()
 
     def put(self, item):
-        self.box.appendleft(item)
+        self.box.put(item)
 
     def get(self):
-        #TODO incorect behavior. Should block if empty.
-        try:
-            return self.box.pop()
-        except IndexError:
+        item = self.box.get()
+        if item == EOFError:
             raise EOFError
+        return item
 
     def __iter__(self):
-        return iter(self.box)
+        for item in self.box:
+            if item == EOFError:
+                raise StopIteration
+            yield item
 
 
 class Buffer:
